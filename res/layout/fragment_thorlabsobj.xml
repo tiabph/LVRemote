@@ -9,7 +9,7 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Thorlabs XYZ"
+        android:text="Thorlabs Obj"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <LinearLayout
@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/textView2"
             android:layout_width="83dp"
-            android:layout_height="wrap_content"
+            android:layout_height="40dp"
             android:height="40dp"
             android:text="speed:"
             android:textAppearance="?android:attr/textAppearanceLarge" />
@@ -36,11 +36,38 @@
         android:layout_height="wrap_content" >
 
         <Button
+            android:id="@+id/Button03"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj1+" />
+
+        <Button
+            android:id="@+id/Button04"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj1-" />
+
+        <TextView
+            android:id="@+id/TextView03"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
             android:id="@+id/button1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:height="75dp"
-            android:text="X+"
+            android:text="Obj2+"
             android:width="130dp" />
 
         <Button
@@ -48,7 +75,7 @@
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
-            android:text="X-" />
+            android:text="Obj2-" />
 
         <TextView
             android:id="@+id/textView4"
@@ -61,29 +88,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/Button03"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:height="75dp"
-            android:text="Y+" />
-
-        <Button
-            android:id="@+id/Button04"
-            android:layout_width="130dp"
-            android:layout_height="wrap_content"
-            android:height="75dp"
-            android:text="Y-" />
-
-        <TextView
-            android:id="@+id/TextView02"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.70"
-            android:text="Large Text"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_height="10dp" >
     </LinearLayout>
 
     <LinearLayout
@@ -91,21 +96,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button01"
+            android:id="@+id/Button05"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
-            android:text="Z+" />
+            android:text="OPT+" />
 
         <Button
-            android:id="@+id/Button02"
+            android:id="@+id/Button06"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
-            android:text="Z-" />
+            android:text="OPT-" />
 
         <TextView
-            android:id="@+id/TextView01"
+            android:id="@+id/TextView05"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
