@@ -178,12 +178,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
+			View rootView = inflater.inflate(R.layout.fragment_newport, container,
 					false);
-			TextView textView = (TextView) rootView
+			/*TextView textView = (TextView) rootView
 					.findViewById(R.id.section_label);
 			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
+					ARG_SECTION_NUMBER)));*/
 			return rootView;
 		}
 	}
