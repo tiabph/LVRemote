@@ -777,7 +777,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
-	          
 	    }  
 	      
 	      
@@ -845,6 +844,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	      
 	    @Override  
 	    public void onPause() {  
+	    	System.out.print("on pause\n");
 	        super.onPause();  
 	    }  
 	      
