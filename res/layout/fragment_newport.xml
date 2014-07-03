@@ -25,7 +25,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" android:height="40dp"/>
 
         <SeekBar
-            android:id="@+id/seekBar1"
+            android:id="@+id/sb_npspeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btn_x1p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:height="75dp"
@@ -44,14 +44,14 @@
             android:width="130dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_x1n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="X1-" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txt_x1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
@@ -64,21 +64,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button01"
+            android:id="@+id/btn_y1p"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Y1+" />
 
         <Button
-            android:id="@+id/Button02"
+            android:id="@+id/btn_y1n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Y1-" />
 
         <TextView
-            android:id="@+id/TextView01"
+            android:id="@+id/txt_y1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
@@ -96,21 +96,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button05"
+            android:id="@+id/btn_x2p"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="X2+" />
 
         <Button
-            android:id="@+id/Button06"
+            android:id="@+id/btn_x2n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="X2-" />
 
         <TextView
-            android:id="@+id/TextView05"
+            android:id="@+id/txt_x2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
@@ -123,21 +123,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button03"
+            android:id="@+id/btn_y2p"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Y2+" />
 
         <Button
-            android:id="@+id/Button04"
+            android:id="@+id/btn_y2n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Y2-" />
 
         <TextView
-            android:id="@+id/TextView03"
+            android:id="@+id/txt_y2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"

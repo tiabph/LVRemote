@@ -25,7 +25,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
         <SeekBar
-            android:id="@+id/seekBar1"
+            android:id="@+id/sb_objspeed"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
@@ -36,21 +36,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button03"
+            android:id="@+id/btn_obj1p"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Obj1+" />
 
         <Button
-            android:id="@+id/Button04"
+            android:id="@+id/btn_obj1n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Obj1-" />
 
         <TextView
-            android:id="@+id/TextView03"
+            android:id="@+id/txt_obj1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
@@ -63,7 +63,7 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/button1"
+            android:id="@+id/btn_obj2p"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:height="75dp"
@@ -71,14 +71,14 @@
             android:width="130dp" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btn_obj2n"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="Obj2-" />
 
         <TextView
-            android:id="@+id/textView4"
+            android:id="@+id/txt_obj2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"
@@ -96,21 +96,21 @@
         android:layout_height="wrap_content" >
 
         <Button
-            android:id="@+id/Button05"
+            android:id="@+id/btn_optp"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="OPT+" />
 
         <Button
-            android:id="@+id/Button06"
+            android:id="@+id/btn_optn"
             android:layout_width="130dp"
             android:layout_height="wrap_content"
             android:height="75dp"
             android:text="OPT-" />
 
         <TextView
-            android:id="@+id/TextView05"
+            android:id="@+id/txt_opt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="0.70"

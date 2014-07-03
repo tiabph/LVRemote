@@ -2,9 +2,11 @@
 <resources>
 
     <string name="app_name">LVRemote</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Sample</string>
+    <string name="title_section2">Mirror</string>
+    <string name="title_section3">Obj</string>
+    <string name="title_section4">PIEZO</string>
+    <string name="title_section5">Settings</string>
     <string name="action_settings">Settings</string>
 
 </resources>

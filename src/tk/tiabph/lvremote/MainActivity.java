@@ -1,5 +1,15 @@
 package tk.tiabph.lvremote;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import android.app.Activity;
@@ -9,13 +19,20 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -28,17 +45,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
-
+	FragAdapter mFAdapter;
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+	
+	//TCP comm
+	public static Socket mSocket;
+	public static String mHostAdd="192.168.100.1";
+	public static int mHostPort = 3614;
+	public static boolean mIsConnected = false;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+		StrictMode.setThreadPolicy(policy);
+		
 		setContentView(R.layout.activity_main);
-
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -46,10 +71,18 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
-
+		
+		List<Fragment> fragments = new ArrayList<Fragment>();  
+        fragments.add(new MyFragment1());  
+        fragments.add(new MyFragment2());  
+        fragments.add(new MyFragment3());  
+        fragments.add(new MyFragment4());  
+        fragments.add(new MyFragment5());
+        mFAdapter = new FragAdapter(getFragmentManager(), fragments); 
+        
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
-		mViewPager.setAdapter(mSectionsPagerAdapter);
+		mViewPager.setAdapter(mFAdapter);
 
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
@@ -63,15 +96,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				});
 
 		// For each of the sections in the app, add a tab to the action bar.
-		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+		for (int i = 0; i < mFAdapter.getCount(); i++) {
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
 			actionBar.addTab(actionBar.newTab()
-					.setText(mSectionsPagerAdapter.getPageTitle(i))
+					.setText(mFAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
+		
+		//Connect("192.168.2.100",3614);
 	}
 
 	@Override
@@ -117,7 +152,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
@@ -133,7 +167,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
-			return 3;
+			return 5;
 		}
 
 		@Override
@@ -146,11 +180,57 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				return getString(R.string.title_section2).toUpperCase(l);
 			case 2:
 				return getString(R.string.title_section3).toUpperCase(l);
+			case 3:
+				return getString(R.string.title_section4).toUpperCase(l);
+			case 4:
+				return getString(R.string.title_section5).toUpperCase(l);
 			}
 			return null;
 		}
 	}
 
+	public class FragAdapter extends FragmentPagerAdapter{  
+	      
+	    private List<Fragment> fragments;  
+	      
+	  
+	    public FragAdapter(FragmentManager fm) {  
+	        super(fm);  
+	    }  
+	      
+	    public FragAdapter(FragmentManager fm, List<Fragment> fragments) {  
+	        super(fm);  
+	        this.fragments = fragments;  
+	    }  
+	  
+	    @Override  
+	    public Fragment getItem(int position) {  
+	        return fragments.get(position);  
+	    }  
+	  
+	    @Override  
+	    public int getCount() {  
+	        return fragments.size();  
+	    }  
+	    
+	    @Override
+		public CharSequence getPageTitle(int position) {
+			Locale l = Locale.getDefault();
+			switch (position) {
+			case 0:
+				return getString(R.string.title_section1).toUpperCase(l);
+			case 1:
+				return getString(R.string.title_section2).toUpperCase(l);
+			case 2:
+				return getString(R.string.title_section3).toUpperCase(l);
+			case 3:
+				return getString(R.string.title_section4).toUpperCase(l);
+			case 4:
+				return getString(R.string.title_section5).toUpperCase(l);
+			}
+			return null;
+		}
+	}  
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -160,27 +240,41 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		 * fragment.
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
-
+		public int sectionnum=0;
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
 		public static PlaceholderFragment newInstance(int sectionNumber) {
 			PlaceholderFragment fragment = new PlaceholderFragment();
+			fragment.sectionnum = sectionNumber;
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 			fragment.setArguments(args);
 			return fragment;
 		}
-
+		
 		public PlaceholderFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_newport, container,
+			View rootView=null;
+			switch (this.sectionnum){//getArguments().getInt(ARG_SECTION_NUMBER)) {
+			case 1:
+				rootView = inflater.inflate(R.layout.fragment_thorlabsxyz, container,false);
+			case 2:
+				rootView = inflater.inflate(R.layout.fragment_newport, container,false);
+			case 3:
+				rootView = inflater.inflate(R.layout.fragment_thorlabsobj, container,false);
+			case 4:
+				rootView = inflater.inflate(R.layout.fragment_piz, container,false);
+			case 5:
+				rootView = inflater.inflate(R.layout.fragment_settings, container,false);
+			}
+			/*View rootView = inflater.inflate(R.layout.fragment_newport, container,
 					false);
-			/*TextView textView = (TextView) rootView
+			TextView textView = (TextView) rootView
 					.findViewById(R.id.section_label);
 			textView.setText(Integer.toString(getArguments().getInt(
 					ARG_SECTION_NUMBER)));*/
@@ -188,4 +282,671 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 	}
 
+	//Sample XYZ
+	public static class MyFragment1 extends Fragment {  
+	    //private Button btn; 
+		private Button btn_xp,btn_xn,btn_yp,btn_yn,btn_zp,btn_zn;  
+	    private SeekBar sb_speed;
+	    @Override  
+	    public void onCreate(Bundle savedInstanceState) {  
+	        super.onCreate(savedInstanceState);  
+	          
+	    }  
+	      
+	      
+	    @Override  
+	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
+	            Bundle savedInstanceState) {  
+	        View view = inflater.inflate(R.layout.fragment_thorlabsxyz, container, false);  
+	        btn_xp = (Button) view.findViewById(R.id.btn_xp);  
+	        btn_xn = (Button) view.findViewById(R.id.btn_xn); 
+	        btn_yp = (Button) view.findViewById(R.id.btn_yp);  
+	        btn_yn = (Button) view.findViewById(R.id.btn_yn); 
+	        btn_zp = (Button) view.findViewById(R.id.btn_zp);  
+	        btn_zn = (Button) view.findViewById(R.id.btn_zn);
+	        sb_speed = (SeekBar) view.findViewById(R.id.sb_xyzspeed);
+	        
+	        btn_xp.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,1,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,1,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_xn.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,1,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,1,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        btn_yp.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,2,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,2,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_yn.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,2,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,2,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	        btn_zp.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,3,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,3,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_zn.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,3,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,3,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	      //seek bar event
+	        sb_speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	            /**
+	             * 拖动条停止拖动的时候调用
+	             */
+	            @Override
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	            	float progress = seekBar.getProgress();//0-100:0:2
+	            	float speed = progress/50;
+	            	MainActivity.SendCmd("THL,1,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("THL,2,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("THL,3,SETV," + String.valueOf(speed));
+	            }
+	            /**
+	             * 拖动条开始拖动的时候调用
+	             */
+	            @Override
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+	                
+	            }
+	            /**
+	             * 拖动条进度改变的时候调用
+	             */
+	            @Override
+	            public void onProgressChanged(SeekBar seekBar, int progress,
+	                    boolean fromUser) {
+	                
+	            }
+	        });
+	        
+	        return view;  
+	    }  
+	      
+	    @Override  
+	    public void onActivityCreated(Bundle savedInstanceState) {  
+	        super.onActivityCreated(savedInstanceState);  
+	    }  
+	      
+	    @Override  
+	    public void onPause() {  
+	        super.onPause();  
+	    }  
+	      
+	} 
+	
+	//Mirror
+	public static class MyFragment2 extends Fragment {  
+	    private Button btn_x1p,btn_x1n,btn_y1p,btn_y1n,btn_x2p,btn_x2n,btn_y2p,btn_y2n;  
+	    private SeekBar sb_speed;
+	    @Override  
+	    public void onCreate(Bundle savedInstanceState) {  
+	        super.onCreate(savedInstanceState);  
+	          
+	    }  
+	      
+	      
+	    @Override  
+	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
+	            Bundle savedInstanceState) {  
+	        View view = inflater.inflate(R.layout.fragment_newport, container, false);  
+	        btn_x1p = (Button) view.findViewById(R.id.btn_x1p);  
+	        btn_x1n = (Button) view.findViewById(R.id.btn_x1n); 
+	        btn_y1p = (Button) view.findViewById(R.id.btn_y1p);  
+	        btn_y1n = (Button) view.findViewById(R.id.btn_y1n); 
+	        btn_x2p = (Button) view.findViewById(R.id.btn_x2p);  
+	        btn_x2n = (Button) view.findViewById(R.id.btn_x2n); 
+	        btn_y2p = (Button) view.findViewById(R.id.btn_y2p);  
+	        btn_y2n = (Button) view.findViewById(R.id.btn_y2n); 
+	        sb_speed = (SeekBar) view.findViewById(R.id.sb_npspeed); 
+	        
+	        btn_x1p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,1,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,1,MOVJ,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_x1n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,1,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,1,MOVJ,-1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        btn_y1p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,2,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,2,MOVJ,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_y1n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,2,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,2,MOVJ,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	        btn_x2p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,3,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,3,MOVJ,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_x2n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,3,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,3,MOVJ,-1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        btn_y2p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,4,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,4,MOVJ,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_y2n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("NPM,4,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("NPM,4,MOVJ,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	        //seek bar event
+	        sb_speed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	            /**
+	             * 拖动条停止拖动的时候调用
+	             */
+	            @Override
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	            	int progress = seekBar.getProgress();//0-100:100:2000
+	            	int speed = progress*20+100;
+	            	MainActivity.SendCmd("NPM,1,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("NPM,2,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("NPM,3,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("NPM,4,SETV," + String.valueOf(speed));
+	            }
+	            /**
+	             * 拖动条开始拖动的时候调用
+	             */
+	            @Override
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+	                
+	            }
+	            /**
+	             * 拖动条进度改变的时候调用
+	             */
+	            @Override
+	            public void onProgressChanged(SeekBar seekBar, int progress,
+	                    boolean fromUser) {
+	                
+	            }
+	        });
+	        return view;  
+	    }  
+	      
+	    @Override  
+	    public void onActivityCreated(Bundle savedInstanceState) {  
+	        super.onActivityCreated(savedInstanceState);  
+	    }  
+	      
+	    @Override  
+	    public void onPause() {  
+	        super.onPause();  
+	    }  
+	      
+	}
+	
+	//OBJ
+	public static class MyFragment3 extends Fragment {  
+	    //private Button btn;  
+		private Button btn_obj1p,btn_obj1n,btn_obj2p,btn_obj2n,btn_optp,btn_optn;  
+	    private SeekBar sb_objspeed;
+	    @Override  
+	    public void onCreate(Bundle savedInstanceState) {  
+	        super.onCreate(savedInstanceState);  
+	          
+	    }  
+	      
+	      
+	    @Override  
+	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
+	            Bundle savedInstanceState) {  
+	        View view = inflater.inflate(R.layout.fragment_thorlabsobj, container, false);  
+
+	        btn_obj1p = (Button) view.findViewById(R.id.btn_obj1p);  
+	        btn_obj1n = (Button) view.findViewById(R.id.btn_obj1n); 
+	        btn_obj2p = (Button) view.findViewById(R.id.btn_obj2p);  
+	        btn_obj2n = (Button) view.findViewById(R.id.btn_obj2n); 
+	        btn_optp = (Button) view.findViewById(R.id.btn_optp);  
+	        btn_optn = (Button) view.findViewById(R.id.btn_optn);
+	        sb_objspeed = (SeekBar) view.findViewById(R.id.sb_objspeed);
+	        
+	        btn_obj1p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,4,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,4,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_obj1n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,4,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,4,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        btn_obj2p.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,5,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,5,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_obj2n.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,5,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,5,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	        btn_optp.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,6,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,6,MOVV,1");
+	                    }   
+					return false;
+				}   
+	        }); 
+	        
+	        btn_optn.setOnTouchListener(new OnTouchListener() {  
+				@Override
+				public boolean onTouch(View v, MotionEvent event) {
+					// TODO Auto-generated method stub
+	                    if(event.getAction() == MotionEvent.ACTION_UP){  
+	                    	MainActivity.SendCmd("THL,6,STOP,0");
+	                    }   
+	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
+	                    	MainActivity.SendCmd("THL,6,MOVV,-1");
+	                    }   
+					return false;
+				}   
+	        });
+	        
+	      //seek bar event
+	        sb_objspeed.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	            /**
+	             * 拖动条停止拖动的时候调用
+	             */
+	            @Override
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	            	float progress = seekBar.getProgress();//0-100:0:2
+	            	float speed = progress/50;
+	            	MainActivity.SendCmd("THL,4,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("THL,5,SETV," + String.valueOf(speed));
+	            	MainActivity.SendCmd("THL,6,SETV," + String.valueOf(speed));
+	            }
+	            /**
+	             * 拖动条开始拖动的时候调用
+	             */
+	            @Override
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+	                
+	            }
+	            /**
+	             * 拖动条进度改变的时候调用
+	             */
+	            @Override
+	            public void onProgressChanged(SeekBar seekBar, int progress,
+	                    boolean fromUser) {
+	                
+	            }
+	        });
+	        
+	        return view;  
+	    }  
+	      
+	    @Override  
+	    public void onActivityCreated(Bundle savedInstanceState) {  
+	        super.onActivityCreated(savedInstanceState);  
+	    }  
+	      
+	    @Override  
+	    public void onPause() {  
+	        super.onPause();  
+	    }  
+	      
+	}
+	
+	//PIEZO
+	public static class MyFragment4 extends Fragment {  
+	    //private Button btn; 
+		private Button btn_pip,btn_pin;  
+	    private SeekBar sb_pistep;
+	    public static double step=0;
+	    
+	    @Override  
+	    public void onCreate(Bundle savedInstanceState) {  
+	        super.onCreate(savedInstanceState);  
+	          
+	    }  
+	      
+	      
+	    @Override  
+	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
+	            Bundle savedInstanceState) {  
+	        View view = inflater.inflate(R.layout.fragment_piz, container, false);  
+	        
+	        btn_pip = (Button) view.findViewById(R.id.btn_pip);  
+	        btn_pin = (Button) view.findViewById(R.id.btn_pin);
+	        sb_pistep = (SeekBar) view.findViewById(R.id.sb_pistep);
+	        step = sb_pistep.getProgress()/10.0;
+	        
+	        btn_pip.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					MainActivity.SendCmd("PIZ,1,MOVR," + String.valueOf(step));
+				}   
+	        }); 
+	        
+	        btn_pin.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO Auto-generated method stub
+					MainActivity.SendCmd("PIZ,1,MOVR,-" + String.valueOf(step));
+				}   
+	        });
+	        
+	      //seek bar event
+	        sb_pistep.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+	            /**
+	             * 拖动条停止拖动的时候调用
+	             */
+	            @Override
+	            public void onStopTrackingTouch(SeekBar seekBar) {
+	            	float progress = seekBar.getProgress();//0-100:0:10
+	            	float speed = progress/10;
+	            	step = speed;
+	            }
+	            /**
+	             * 拖动条开始拖动的时候调用
+	             */
+	            @Override
+	            public void onStartTrackingTouch(SeekBar seekBar) {
+	                
+	            }
+	            /**
+	             * 拖动条进度改变的时候调用
+	             */
+	            @Override
+	            public void onProgressChanged(SeekBar seekBar, int progress,
+	                    boolean fromUser) {
+	                
+	            }
+	        });
+	        
+	        return view;  
+	    }  
+	      
+	    @Override  
+	    public void onActivityCreated(Bundle savedInstanceState) {  
+	        super.onActivityCreated(savedInstanceState);  
+	    }  
+	      
+	    @Override  
+	    public void onPause() {  
+	        super.onPause();  
+	    }  
+	      
+	}
+	
+	//Settings
+	public static class MyFragment5 extends Fragment {  
+	    private Button btn_conn, btn_disconn;  
+	    private TextView txt_host, txt_hostport;
+	    @Override  
+	    public void onCreate(Bundle savedInstanceState) {  
+	        super.onCreate(savedInstanceState);  
+	          
+	    }  
+	      
+	      
+	    @Override  
+	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
+	            Bundle savedInstanceState) {  
+	        View view = inflater.inflate(R.layout.fragment_settings, container, false);  
+	        btn_conn = (Button) view.findViewById(R.id.btn_connect);
+	        btn_disconn = (Button) view.findViewById(R.id.btn_disconn);
+	        txt_host = (TextView) view.findViewById(R.id.txt_host);
+	        txt_hostport = (TextView) view.findViewById(R.id.txt_host_port);
+	        btn_conn.setOnClickListener(new OnClickListener(){
+	        	@Override  
+	            public void onClick(View v) {  
+	        		MainActivity.Connect(txt_host.getText().toString(), Integer.parseInt(txt_hostport.getText().toString()));
+	            } 
+	        });
+	        btn_disconn.setOnClickListener(new OnClickListener(){
+	        	@Override  
+	            public void onClick(View v) {  
+	        		MainActivity.DisConnect();
+	            } 
+	        });
+	        
+	        return view;  
+	    }  
+	      
+	    @Override  
+	    public void onActivityCreated(Bundle savedInstanceState) {  
+	        super.onActivityCreated(savedInstanceState);  
+	    }  
+	      
+	    @Override  
+	    public void onPause() {  
+	        super.onPause();  
+	    }  
+	      
+	}
+
+	//
+	public static boolean Connect(String address, int port){
+		
+		mHostAdd = address;
+		mHostPort = port;
+		try {
+			mSocket = new Socket(mHostAdd, mHostPort);
+			
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mIsConnected = mSocket.isConnected();
+		return mIsConnected;
+	}
+	
+	//
+	public static void DisConnect(){
+		try {
+			mSocket.close();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		mIsConnected = false;
+	}
+	
+	public static String SendCmd(String Cmd){
+		String msg = null;
+		try {
+			if(mIsConnected){
+				PrintWriter out = new PrintWriter( new BufferedWriter( new OutputStreamWriter(mSocket.getOutputStream())),true);        
+				out.println(Cmd + "\n\r");
+				BufferedReader br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));   
+				msg = br.readLine(); 
+			}
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return msg;
+	}
+	
 }
