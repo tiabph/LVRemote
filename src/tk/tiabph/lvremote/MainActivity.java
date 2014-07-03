@@ -21,6 +21,7 @@ import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -56,6 +58,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public static String mHostAdd="192.168.100.1";
 	public static int mHostPort = 3614;
 	public static boolean mIsConnected = false;
+	public static String StopCmd=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +86,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mFAdapter);
+		mViewPager.setOnTouchListener(new OnTouchListener(){
 
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				// TODO Auto-generated method stub
+				//System.out.printf("On Drag: %d\n",event.getAction());
+				if(StopCmd!=null){
+					SendCmd(StopCmd);
+					StopCmd=null;
+				}
+				return false;
+			}
+			
+		});
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
@@ -312,9 +328,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,1,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,1,MOVV,1");
+	                    	MainActivity.StopCmd="THL,1,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -326,9 +344,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,1,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,1,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,1,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -339,9 +359,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,2,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,2,MOVV,1");
+	                    	MainActivity.StopCmd="THL,2,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -353,9 +375,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,2,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,2,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,2,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -367,9 +391,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,3,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,3,MOVV,1");
+	                    	MainActivity.StopCmd="THL,3,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -381,9 +407,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,3,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,3,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,3,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -465,9 +493,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,1,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,1,MOVJ,1");
+	                    	MainActivity.StopCmd="NPM,1,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -479,9 +509,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,1,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,1,MOVJ,-1");
+	                    	MainActivity.StopCmd="NPM,1,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -492,9 +524,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,2,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,2,MOVJ,1");
+	                    	MainActivity.StopCmd="NPM,2,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -506,9 +540,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,2,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,2,MOVJ,-1");
+	                    	MainActivity.StopCmd="NPM,2,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -520,9 +556,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,3,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,3,MOVJ,1");
+	                    	MainActivity.StopCmd="NPM,3,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -534,9 +572,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,3,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,3,MOVJ,-1");
+	                    	MainActivity.StopCmd="NPM,3,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -547,9 +587,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,4,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,4,MOVJ,1");
+	                    	MainActivity.StopCmd="NPM,4,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -561,9 +603,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("NPM,4,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("NPM,4,MOVJ,-1");
+	                    	MainActivity.StopCmd="NPM,4,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -645,9 +689,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,4,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,4,MOVV,1");
+	                    	MainActivity.StopCmd="THL,4,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -659,9 +705,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,4,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,4,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,4,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -672,9 +720,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,5,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,5,MOVV,1");
+	                    	MainActivity.StopCmd="THL,5,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -686,9 +736,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,5,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,5,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,5,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -700,9 +752,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,6,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,6,MOVV,1");
+	                    	MainActivity.StopCmd="THL,6,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -714,9 +768,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 					// TODO Auto-generated method stub
 	                    if(event.getAction() == MotionEvent.ACTION_UP){  
 	                    	MainActivity.SendCmd("THL,6,STOP,0");
+	                    	MainActivity.StopCmd=null;
 	                    }   
 	                    if(event.getAction() == MotionEvent.ACTION_DOWN){  
 	                    	MainActivity.SendCmd("THL,6,MOVV,-1");
+	                    	MainActivity.StopCmd="THL,6,STOP,0";
 	                    }   
 					return false;
 				}   
@@ -776,9 +832,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	    
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
-	        super.onCreate(savedInstanceState);  
-	    }  
-	      
+	        super.onCreate(savedInstanceState); 
+	    } 
+	     
 	      
 	    @Override  
 	    public View onCreateView(LayoutInflater inflater, ViewGroup container,  
@@ -844,7 +900,6 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	      
 	    @Override  
 	    public void onPause() {  
-	    	System.out.print("on pause\n");
 	        super.onPause();  
 	    }  
 	      
