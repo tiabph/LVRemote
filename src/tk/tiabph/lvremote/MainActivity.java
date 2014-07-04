@@ -11,6 +11,8 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -19,6 +21,8 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.view.DragEvent;
@@ -301,8 +305,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	//Sample XYZ
 	public static class MyFragment1 extends Fragment {  
 	    //private Button btn; 
-		private Button btn_xp,btn_xn,btn_yp,btn_yn,btn_zp,btn_zn;  
-	    private SeekBar sb_speed;
+		public static Button btn_xp,btn_xn,btn_yp,btn_yn,btn_zp,btn_zn;  
+		public static SeekBar sb_speed;
+        public static TextView txt_x, txt_y, txt_z;
+        public static Timer timer;
+        public static double redy=0,x=0,y=0,z=0;
+        
+        static final Handler handler = new Handler() {     
+            @Override  
+            public void handleMessage(Message msg) {   
+                super.handleMessage(msg);   
+                //handler处理消息  
+                if(msg.what>0){   
+                	txt_x.setText(Double.toString(x));
+                	txt_y.setText(Double.toString(y));
+                	txt_z.setText(Double.toString(z));
+                }   
+            }   
+        };
+        
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
@@ -321,6 +342,29 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        btn_zp = (Button) view.findViewById(R.id.btn_zp);  
 	        btn_zn = (Button) view.findViewById(R.id.btn_zn);
 	        sb_speed = (SeekBar) view.findViewById(R.id.sb_xyzspeed);
+	        txt_x = (TextView) view.findViewById(R.id.txt_x);
+	        txt_y = (TextView) view.findViewById(R.id.txt_y);
+	        txt_z = (TextView) view.findViewById(R.id.txt_z);
+	        
+	        timer=new Timer();
+	        timer.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Message msg = new Message();
+					if(GetCmd("THL,1,REDY,0")!=1 || GetCmd("THL,2,REDY,0")!=1 || GetCmd("THL,3,REDY,0")!=1){
+						msg.what = 1;  
+					}else{
+						x=GetCmd("THL,1,GETP,0");						
+						y=GetCmd("THL,2,GETP,0");
+						z=GetCmd("THL,3,GETP,0");
+						msg.what = 1; 
+					}  
+					handler.sendMessage(msg);   
+				}
+	        	
+	        }, 10, 200);
 	        
 	        btn_xp.setOnTouchListener(new OnTouchListener() {  
 				@Override
@@ -464,8 +508,26 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	
 	//Mirror
 	public static class MyFragment2 extends Fragment {  
-	    private Button btn_x1p,btn_x1n,btn_y1p,btn_y1n,btn_x2p,btn_x2n,btn_y2p,btn_y2n;  
-	    private SeekBar sb_speed;
+		public static Button btn_x1p,btn_x1n,btn_y1p,btn_y1n,btn_x2p,btn_x2n,btn_y2p,btn_y2n;  
+	    public static SeekBar sb_speed;
+        public static TextView txt_x1, txt_y1, txt_x2, txt_y2;
+        public static Timer timer;
+        public static double redy=0,x1=0,y1=0,x2=0,y2=0;
+        
+        static final Handler handler = new Handler() {     
+            @Override  
+            public void handleMessage(Message msg) {   
+                super.handleMessage(msg);   
+                //handler处理消息  
+                if(msg.what>0){   
+                	txt_x1.setText(Double.toString(x1));
+                	txt_y1.setText(Double.toString(y1));
+                	txt_x2.setText(Double.toString(x2));
+                	txt_y2.setText(Double.toString(y2));
+                }   
+            }   
+        };
+        
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
@@ -486,6 +548,31 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        btn_y2p = (Button) view.findViewById(R.id.btn_y2p);  
 	        btn_y2n = (Button) view.findViewById(R.id.btn_y2n); 
 	        sb_speed = (SeekBar) view.findViewById(R.id.sb_npspeed); 
+	        txt_x1 = (TextView) view.findViewById(R.id.txt_x1);
+	        txt_y1 = (TextView) view.findViewById(R.id.txt_y1);
+	        txt_x2 = (TextView) view.findViewById(R.id.txt_x2);
+	        txt_y2 = (TextView) view.findViewById(R.id.txt_y2);
+
+	        timer=new Timer();
+	        timer.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Message msg = new Message();
+					if(GetCmd("NPM,1,REDY,0")==0){
+						msg.what = 1;  
+					}else{
+						x1=GetCmd("NPM,1,GETP,0");
+						y1=GetCmd("NPM,2,GETP,0");
+						x2=GetCmd("NPM,3,GETP,0");
+						y2=GetCmd("NPM,4,GETP,0");
+						msg.what = 1; 
+					}  
+                    handler.sendMessage(msg);   
+				}
+	        	
+	        }, 10, 200);
 	        
 	        btn_x1p.setOnTouchListener(new OnTouchListener() {  
 				@Override
@@ -653,7 +740,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	      
 	    @Override  
 	    public void onPause() {  
-	        super.onPause();  
+	        super.onPause(); 
+	        timer.cancel();
 	    }  
 	      
 	}
@@ -661,8 +749,25 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	//OBJ
 	public static class MyFragment3 extends Fragment {  
 	    //private Button btn;  
-		private Button btn_obj1p,btn_obj1n,btn_obj2p,btn_obj2n,btn_optp,btn_optn;  
-	    private SeekBar sb_objspeed;
+		public static Button btn_obj1p,btn_obj1n,btn_obj2p,btn_obj2n,btn_optp,btn_optn;  
+		public static SeekBar sb_objspeed;
+	    public static TextView txt_obj1, txt_obj2, txt_opt;
+        public static Timer timer;
+        public static double redy=0,obj1=0, obj2=0, opt=0;
+        
+        static final Handler handler = new Handler() {     
+            @Override  
+            public void handleMessage(Message msg) {   
+                super.handleMessage(msg);   
+                //handler处理消息  
+                if(msg.what>0){   
+                	txt_obj1.setText(Double.toString(obj1));
+                	txt_obj2.setText(Double.toString(obj2));
+                	txt_opt.setText(Double.toString(opt));
+                }   
+            }   
+        };
+        
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
@@ -682,6 +787,29 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        btn_optp = (Button) view.findViewById(R.id.btn_optp);  
 	        btn_optn = (Button) view.findViewById(R.id.btn_optn);
 	        sb_objspeed = (SeekBar) view.findViewById(R.id.sb_objspeed);
+	        txt_obj1 = (TextView) view.findViewById(R.id.txt_obj1);
+	        txt_obj2 = (TextView) view.findViewById(R.id.txt_obj2);
+	        txt_opt = (TextView) view.findViewById(R.id.txt_opt);
+	        
+	        timer=new Timer();
+	        timer.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Message msg = new Message();
+					if(GetCmd("THL,4,REDY,0")!=1 || GetCmd("THL,5,REDY,0")!=1 || GetCmd("THL,6,REDY,0")!=1){
+						msg.what = 1;  
+					}else{
+						obj1=GetCmd("THL,4,GETP,0");
+						obj2=GetCmd("THL,5,GETP,0");
+						opt=GetCmd("THL,6,GETP,0");
+						msg.what = 1; 
+					} 
+                    handler.sendMessage(msg);   
+				}
+	        	
+	        }, 10, 200);
 	        
 	        btn_obj1p.setOnTouchListener(new OnTouchListener() {  
 				@Override
@@ -826,10 +954,24 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	//PIEZO
 	public static class MyFragment4 extends Fragment {  
 	    //private Button btn; 
-		private Button btn_pip,btn_pin;  
-	    private SeekBar sb_pistep;
+		public static Button btn_pip,btn_pin;  
+		public static SeekBar sb_pistep;
+		public static TextView txt_pistep, txt_pi;
 	    public static double step=0;
-	    
+	    public static Timer timer;
+        public static double redy=0,pi=0;
+        
+        static final Handler handler = new Handler() {     
+            @Override  
+            public void handleMessage(Message msg) {   
+                super.handleMessage(msg);   
+                //handler处理消息  
+                if(msg.what>0){   
+                	txt_pi.setText(Double.toString(pi));
+                }   
+            }   
+        };
+        
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState); 
@@ -844,7 +986,27 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        btn_pip = (Button) view.findViewById(R.id.btn_pip);  
 	        btn_pin = (Button) view.findViewById(R.id.btn_pin);
 	        sb_pistep = (SeekBar) view.findViewById(R.id.sb_pistep);
+	        txt_pistep = (TextView) view.findViewById(R.id.txt_pistep);
+	        txt_pi = (TextView) view.findViewById(R.id.txt_pi);
+	        
 	        step = sb_pistep.getProgress()/10.0;
+	        timer=new Timer();
+	        timer.schedule(new TimerTask(){
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					Message msg = new Message();
+					if(GetCmd("PIZ,1,REDY,0")==0){
+						msg.what = 1;  
+					}else{
+						pi=GetCmd("PIZ,1,GETP,0");
+						msg.what = 1; 
+					}  
+                    handler.sendMessage(msg);   
+				}
+	        	
+	        }, 10, 200);
 	        
 	        btn_pip.setOnClickListener(new OnClickListener() {
 				@Override
@@ -869,8 +1031,9 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	             */
 	            @Override
 	            public void onStopTrackingTouch(SeekBar seekBar) {
-	            	float progress = seekBar.getProgress();//0-100:0:10
-	            	float speed = progress/10;
+	            	double progress = seekBar.getProgress();//0-100:0:10
+	            	double speed = progress/10.0;
+	            	txt_pistep.setText(Double.toString(speed));
 	            	step = speed;
 	            }
 	            /**
@@ -886,7 +1049,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	            @Override
 	            public void onProgressChanged(SeekBar seekBar, int progress,
 	                    boolean fromUser) {
-	                
+	            	double speed = progress/10.0;
+	            	txt_pistep.setText(Double.toString(speed));
 	            }
 	        });
 	        
@@ -993,6 +1157,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				out.println(Cmd + "\n\r");
 				BufferedReader br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));   
 				msg = br.readLine(); 
+				mSocket.getOutputStream().flush();
 			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -1004,4 +1169,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		return msg;
 	}
 	
+	public static double parseCmd(String cmd){
+		if(cmd.length()<10){
+			return 0;
+		}else{
+			String tpar = cmd.substring(11);
+			return Double.parseDouble( tpar );
+		}
+	}
+	public static double GetCmd(String Cmd){
+		String ret = SendCmd(Cmd);
+		if(ret==null){
+			return 0;
+		}else{
+			return parseCmd(ret);
+		}
+	}
 }
