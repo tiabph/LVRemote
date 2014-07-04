@@ -59,10 +59,14 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	
 	//TCP comm
 	public static Socket mSocket;
+	public static BufferedReader br;
 	public static String mHostAdd="192.168.100.1";
 	public static int mHostPort = 3614;
 	public static boolean mIsConnected = false;
 	public static String StopCmd=null;
+	public static List<Fragment> fragments;
+	
+	public static Timer timer;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +83,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
 		
-		List<Fragment> fragments = new ArrayList<Fragment>();  
+		fragments = new ArrayList<Fragment>();  
         fragments.add(new MyFragment1());  
         fragments.add(new MyFragment2());  
         fragments.add(new MyFragment3());  
@@ -127,6 +131,90 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		}
 		
 		//Connect("192.168.2.100",3614);
+		timer=new Timer();
+        timer.schedule(new TimerTask(){
+
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				if(mSocket==null){
+					System.out.printf("null\n");
+				}else if(mSocket.isConnected()){
+					System.out.printf("is Connected\n");
+				}else{
+					System.out.printf("NOT Connected\n");
+				}
+				boolean update[]={false,false,false,false};
+				if(mSocket!=null && mSocket.isConnected()){
+					try {
+						System.out.printf("read\n");
+						String tstr,str1,str2,str3,str4;
+						double par=0;
+						while((tstr = br.readLine())!=null){
+							str1 = tstr.substring(0, 3);
+							str2 = tstr.substring(4, 5);
+							str3 = tstr.substring(6, 10);
+							str4 = tstr.substring(11);
+							System.out.printf("%s|%s|%s|%s\n",str1,str2,str3,str4);
+							par = Double.parseDouble(str4);
+							if(str1.equals("NPM")){//NPM
+								if(str3.equals("GETP")){//Position
+									switch(Integer.decode(str2)){
+									case 1:
+										MyFragment2.x1=par;
+										break;
+									case 2:
+										MyFragment2.y1=par;
+										break;
+									case 3:
+										MyFragment2.x2=par;
+										break;
+									case 4:
+										MyFragment2.y2=par;
+										break;
+									}
+									update[1]=true;
+								}
+							}else if(str1.equals("THL")){//Thorlabs
+								if(str3.equals("GETP")){//Position
+									switch(Integer.decode(str2)){
+									case 1:
+										MyFragment1.x=par;
+										break;
+									case 2:
+										MyFragment1.y=par;
+										break;
+									case 3:
+										MyFragment1.z=par;
+										break;
+									case 4:
+										MyFragment3.obj1=par;
+										break;
+									case 5:
+										MyFragment3.obj2=par;
+										break;
+									case 6:
+										MyFragment3.opt=par;
+										break;
+									}
+									update[0]=true;
+									update[2]=true;
+								}
+							}else if(str1.equals("PIZ")){//PIEZO
+								if(str3.equals("GETP")){//Position
+									MyFragment4.pi=par;
+								}
+								update[3]=true;
+							}
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+        	
+        }, 10, 100);
 	}
 
 	@Override
@@ -324,6 +412,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             }   
         };
         
+        static void Update(){
+        	txt_x.setText(Double.toString(x));
+        	txt_y.setText(Double.toString(y));
+        	txt_z.setText(Double.toString(z));
+        }
+        
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
@@ -353,18 +447,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				public void run() {
 					// TODO Auto-generated method stub
 					Message msg = new Message();
-					if(GetCmd("THL,1,REDY,0")!=1 || GetCmd("THL,2,REDY,0")!=1 || GetCmd("THL,3,REDY,0")!=1){
-						msg.what = 1;  
-					}else{
-						x=GetCmd("THL,1,GETP,0");						
-						y=GetCmd("THL,2,GETP,0");
-						z=GetCmd("THL,3,GETP,0");
-						msg.what = 1; 
-					}  
+					msg.what = 1;
 					handler.sendMessage(msg);   
 				}
 	        	
-	        }, 10, 200);
+	        }, 10, 100);
 	        
 	        btn_xp.setOnTouchListener(new OnTouchListener() {  
 				@Override
@@ -528,6 +615,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
             }   
         };
         
+        static void Update(){
+        	txt_x1.setText(Double.toString(x1));
+        	txt_y1.setText(Double.toString(y1));
+        	txt_x2.setText(Double.toString(x2));
+        	txt_y2.setText(Double.toString(y2));
+        }
+
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
 	        super.onCreate(savedInstanceState);  
@@ -560,19 +654,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				public void run() {
 					// TODO Auto-generated method stub
 					Message msg = new Message();
-					if(GetCmd("NPM,1,REDY,0")==0){
-						msg.what = 1;  
-					}else{
-						x1=GetCmd("NPM,1,GETP,0");
-						y1=GetCmd("NPM,2,GETP,0");
-						x2=GetCmd("NPM,3,GETP,0");
-						y2=GetCmd("NPM,4,GETP,0");
-						msg.what = 1; 
-					}  
+					msg.what = 1;   
                     handler.sendMessage(msg);   
 				}
 	        	
-	        }, 10, 200);
+	        }, 10, 100);
 	        
 	        btn_x1p.setOnTouchListener(new OnTouchListener() {  
 				@Override
@@ -741,7 +827,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	    @Override  
 	    public void onPause() {  
 	        super.onPause(); 
-	        timer.cancel();
+	        //timer.cancel();
 	    }  
 	      
 	}
@@ -767,6 +853,12 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 }   
             }   
         };
+        
+        static void Update(){
+        	txt_obj1.setText(Double.toString(obj1));
+        	txt_obj2.setText(Double.toString(obj2));
+        	txt_opt.setText(Double.toString(opt));
+        }
         
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
@@ -798,14 +890,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				public void run() {
 					// TODO Auto-generated method stub
 					Message msg = new Message();
-					if(GetCmd("THL,4,REDY,0")!=1 || GetCmd("THL,5,REDY,0")!=1 || GetCmd("THL,6,REDY,0")!=1){
-						msg.what = 1;  
-					}else{
-						obj1=GetCmd("THL,4,GETP,0");
-						obj2=GetCmd("THL,5,GETP,0");
-						opt=GetCmd("THL,6,GETP,0");
-						msg.what = 1; 
-					} 
+					msg.what = 1;  
                     handler.sendMessage(msg);   
 				}
 	        	
@@ -968,9 +1053,16 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
                 //handler处理消息  
                 if(msg.what>0){   
                 	txt_pi.setText(Double.toString(pi));
+                	double progress = sb_pistep.getProgress();//0-100:0:10
+	            	double speed = progress/10.0;
+	            	txt_pistep.setText(Double.toString(speed));
                 }   
             }   
         };
+        
+        static void Update(){
+        	txt_pi.setText(Double.toString(pi));
+        }
         
 	    @Override  
 	    public void onCreate(Bundle savedInstanceState) {  
@@ -990,23 +1082,19 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        txt_pi = (TextView) view.findViewById(R.id.txt_pi);
 	        
 	        step = sb_pistep.getProgress()/10.0;
-	        timer=new Timer();
+	        
+	       timer=new Timer();
 	        timer.schedule(new TimerTask(){
 
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
 					Message msg = new Message();
-					if(GetCmd("PIZ,1,REDY,0")==0){
-						msg.what = 1;  
-					}else{
-						pi=GetCmd("PIZ,1,GETP,0");
-						msg.what = 1; 
-					}  
+					msg.what = 1;  
                     handler.sendMessage(msg);   
 				}
 	        	
-	        }, 10, 200);
+	        }, 10, 100);
 	        
 	        btn_pip.setOnClickListener(new OnClickListener() {
 				@Override
@@ -1123,6 +1211,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		mHostPort = port;
 		try {
 			mSocket = new Socket(mHostAdd, mHostPort);
+			br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -1155,9 +1244,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			if(mIsConnected){
 				PrintWriter out = new PrintWriter( new BufferedWriter( new OutputStreamWriter(mSocket.getOutputStream())),true);        
 				out.println(Cmd + "\n\r");
-				BufferedReader br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));   
-				msg = br.readLine(); 
-				mSocket.getOutputStream().flush();
+				out.flush();
 			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
