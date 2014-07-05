@@ -137,13 +137,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				if(mSocket==null){
+				/*if(mSocket==null){
 					System.out.printf("null\n");
 				}else if(mSocket.isConnected()){
 					System.out.printf("is Connected\n");
 				}else{
 					System.out.printf("NOT Connected\n");
-				}
+				}*/
 				boolean update[]={false,false,false,false};
 				if(mSocket!=null && mSocket.isConnected()){
 					try {
