@@ -212,6 +212,57 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 						e.printStackTrace();
 					}
 				}
+				/*
+				//update fragment1
+				if(fragments.get(0).getView() != null){
+					fragments.get(0).getView().post(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						MyFragment1.txt_x.setText(Double.toString(MyFragment1.x));
+						MyFragment1.txt_y.setText(Double.toString(MyFragment1.y));
+						MyFragment1.txt_z.setText(Double.toString(MyFragment1.z));
+						}					
+					});
+				}
+				//update fragment2
+				if(fragments.get(1).getView() != null){
+					fragments.get(1).getView().post(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						MyFragment2.txt_x1.setText(Double.toString(MyFragment2.x1));
+						MyFragment2.txt_y1.setText(Double.toString(MyFragment2.y1));
+						MyFragment2.txt_x2.setText(Double.toString(MyFragment2.x2));
+						MyFragment2.txt_y2.setText(Double.toString(MyFragment2.y2));
+						}					
+					});
+				}
+				//update fragment3
+				if(fragments.get(2).getView() != null){
+					fragments.get(2).getView().post(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						MyFragment3.txt_obj1.setText(Double.toString(MyFragment3.obj1));
+						MyFragment3.txt_obj2.setText(Double.toString(MyFragment3.obj2));
+						MyFragment3.txt_opt.setText(Double.toString(MyFragment3.opt));
+						}					
+					});
+				}
+				//update fragment4
+				if(fragments.get(3).getView() != null){
+					fragments.get(3).getView().post(new Runnable(){
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						MyFragment4.txt_pi.setText(Double.toString(MyFragment4.pi));
+	                	double progress = MyFragment4.sb_pistep.getProgress();//0-100:0:10
+		            	double speed = progress/10.0;
+		            	MyFragment4.txt_pistep.setText(Double.toString(speed));
+						}					
+					});
+				}*/
 			}
         	
         }, 10, 100);
@@ -1083,7 +1134,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	        
 	        step = sb_pistep.getProgress()/10.0;
 	        
-	       timer=new Timer();
+	        timer=new Timer();
 	        timer.schedule(new TimerTask(){
 
 				@Override
