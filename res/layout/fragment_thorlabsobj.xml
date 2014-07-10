@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thorlabs Obj"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:height="40dp"
+            android:text="speed:"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <SeekBar
+            android:id="@+id/sb_objspeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_obj1p"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj1+" />
+
+        <Button
+            android:id="@+id/btn_obj1n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj1-" />
+
+        <TextView
+            android:id="@+id/txt_obj1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_obj2p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj2+"
+            android:width="130dp" />
+
+        <Button
+            android:id="@+id/btn_obj2n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Obj2-" />
+
+        <TextView
+            android:id="@+id/txt_obj2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_optp"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="OPT+" />
+
+        <Button
+            android:id="@+id/btn_optn"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="OPT-" />
+
+        <TextView
+            android:id="@+id/txt_opt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+</LinearLayout>
