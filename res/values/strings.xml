@@ -6,7 +6,8 @@
     <string name="title_section2">Mirror</string>
     <string name="title_section3">Obj</string>
     <string name="title_section4">PIEZO</string>
-    <string name="title_section5">Settings</string>
+    <string name="title_section5">SERVO</string>
+    <string name="title_section6">Settings</string>
     <string name="action_settings">Settings</string>
 
 </resources>

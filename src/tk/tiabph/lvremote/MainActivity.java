@@ -88,6 +88,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
         fragments.add(new MyFragment2());  
         fragments.add(new MyFragment3());  
         fragments.add(new MyFragment4());  
+        fragments.add(new Fragment_Servo());
         fragments.add(new MyFragment5());
         mFAdapter = new FragAdapter(getFragmentManager(), fragments); 
         
@@ -386,6 +387,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				return getString(R.string.title_section4).toUpperCase(l);
 			case 4:
 				return getString(R.string.title_section5).toUpperCase(l);
+			case 5:
+				return getString(R.string.title_section6).toUpperCase(l);
 			}
 			return null;
 		}
@@ -429,6 +432,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			case 4:
 				rootView = inflater.inflate(R.layout.fragment_piz, container,false);
 			case 5:
+				rootView = inflater.inflate(R.layout.fragment_servo, container,false);
+			case 6:
 				rootView = inflater.inflate(R.layout.fragment_settings, container,false);
 			}
 			/*View rootView = inflater.inflate(R.layout.fragment_newport, container,

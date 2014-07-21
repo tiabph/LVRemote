@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="SERVO"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal" >
+
+        <ToggleButton
+            android:id="@+id/tbtn_srv1"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_weight="0.50"
+            android:checked="false"
+            android:text="ToggleButton"
+            android:textOff="Channel1"
+            android:textOn="Channel1" />
+
+        <ToggleButton
+            android:id="@+id/tbtn_srv2"
+            android:layout_width="wrap_content"
+            android:layout_height="75dp"
+            android:layout_weight="0.50"
+            android:text="ToggleButton"
+            android:textOff="Channel2"
+            android:textOn="Channel2" />
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="0.16" >
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Srv1+: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <SeekBar
+            android:id="@+id/sb_srv1p"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextView01"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Srv1-: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <SeekBar
+            android:id="@+id/sb_srv1n"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextView02"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Srv2+: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <SeekBar
+            android:id="@+id/sb_srv2p"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/TextView03"
+            android:layout_width="75dp"
+            android:layout_height="wrap_content"
+            android:text="Srv2-: "
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <SeekBar
+            android:id="@+id/sb_srv2n"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>
