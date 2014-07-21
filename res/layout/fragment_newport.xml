@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="20dp"
+    android:gravity="center_horizontal"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Newport Mirror"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:text="speed:"
+            android:textAppearance="?android:attr/textAppearanceLarge" android:height="40dp"/>
+
+        <SeekBar
+            android:id="@+id/sb_npspeed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_x1p"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="X1+"
+            android:width="130dp" />
+
+        <Button
+            android:id="@+id/btn_x1n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="X1-" />
+
+        <TextView
+            android:id="@+id/txt_x1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_y1p"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Y1+" />
+
+        <Button
+            android:id="@+id/btn_y1n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Y1-" />
+
+        <TextView
+            android:id="@+id/txt_y1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="10dp" >
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_x2p"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="X2+" />
+
+        <Button
+            android:id="@+id/btn_x2n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="X2-" />
+
+        <TextView
+            android:id="@+id/txt_x2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <Button
+            android:id="@+id/btn_y2p"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Y2+" />
+
+        <Button
+            android:id="@+id/btn_y2n"
+            android:layout_width="130dp"
+            android:layout_height="wrap_content"
+            android:height="75dp"
+            android:text="Y2-" />
+
+        <TextView
+            android:id="@+id/txt_y2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.70"
+            android:text="Large Text"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
+    </LinearLayout>
+
+</LinearLayout>
