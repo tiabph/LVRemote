@@ -1,5 +1,8 @@
 package tk.tiabph.lvremote;
 
+<<<<<<< HEAD
+import java.util.Locale;
+=======
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -13,6 +16,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
+>>>>>>> origin/glsh
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -21,15 +25,23 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.support.v13.app.FragmentPagerAdapter;
 import android.os.Bundle;
+<<<<<<< HEAD
+import android.support.v4.view.ViewPager;
+=======
 import android.os.Handler;
 import android.os.Message;
 import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.view.DragEvent;
+>>>>>>> origin/glsh
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+<<<<<<< HEAD
+import android.view.View;
+import android.view.ViewGroup;
+=======
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +51,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.SeekBar;
+>>>>>>> origin/glsh
 import android.widget.TextView;
 
 public class MainActivity extends Activity implements ActionBar.TabListener {
@@ -51,11 +64,17 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * {@link android.support.v13.app.FragmentStatePagerAdapter}.
 	 */
 	SectionsPagerAdapter mSectionsPagerAdapter;
+<<<<<<< HEAD
+
+=======
 	FragAdapter mFAdapter;
+>>>>>>> origin/glsh
 	/**
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	ViewPager mViewPager;
+<<<<<<< HEAD
+=======
 	
 	//TCP comm
 	public static Socket mSocket;
@@ -67,14 +86,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	public static List<Fragment> fragments;
 	
 	public static Timer timer;
+>>>>>>> origin/glsh
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+<<<<<<< HEAD
+		setContentView(R.layout.activity_main);
+
+=======
 		StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
 		StrictMode.setThreadPolicy(policy);
 		
 		setContentView(R.layout.activity_main);
+>>>>>>> origin/glsh
 		// Set up the action bar.
 		final ActionBar actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -82,6 +107,13 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		// Create the adapter that will return a fragment for each of the three
 		// primary sections of the activity.
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager());
+<<<<<<< HEAD
+
+		// Set up the ViewPager with the sections adapter.
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+
+=======
 		
 		fragments = new ArrayList<Fragment>();  
         fragments.add(new MyFragment1());  
@@ -109,6 +141,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			}
 			
 		});
+>>>>>>> origin/glsh
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
@@ -121,12 +154,21 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				});
 
 		// For each of the sections in the app, add a tab to the action bar.
+<<<<<<< HEAD
+		for (int i = 0; i < mSectionsPagerAdapter.getCount(); i++) {
+=======
 		for (int i = 0; i < mFAdapter.getCount(); i++) {
+>>>>>>> origin/glsh
 			// Create a tab with text corresponding to the page title defined by
 			// the adapter. Also specify this Activity object, which implements
 			// the TabListener interface, as the callback (listener) for when
 			// this tab is selected.
 			actionBar.addTab(actionBar.newTab()
+<<<<<<< HEAD
+					.setText(mSectionsPagerAdapter.getPageTitle(i))
+					.setTabListener(this));
+		}
+=======
 					.setText(mFAdapter.getPageTitle(i))
 					.setTabListener(this));
 		}
@@ -267,6 +309,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			}
         	
         }, 10, 100);
+>>>>>>> origin/glsh
 	}
 
 	@Override
@@ -312,6 +355,10 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 	 * one of the sections/tabs/pages.
 	 */
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
+<<<<<<< HEAD
+
+=======
+>>>>>>> origin/glsh
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
@@ -327,7 +374,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
+<<<<<<< HEAD
+			return 3;
+=======
 			return 5;
+>>>>>>> origin/glsh
 		}
 
 		@Override
@@ -340,15 +391,20 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				return getString(R.string.title_section2).toUpperCase(l);
 			case 2:
 				return getString(R.string.title_section3).toUpperCase(l);
+<<<<<<< HEAD
+=======
 			case 3:
 				return getString(R.string.title_section4).toUpperCase(l);
 			case 4:
 				return getString(R.string.title_section5).toUpperCase(l);
+>>>>>>> origin/glsh
 			}
 			return null;
 		}
 	}
 
+<<<<<<< HEAD
+=======
 	public class FragAdapter extends FragmentPagerAdapter{  
 	      
 	    private List<Fragment> fragments;  
@@ -393,6 +449,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			return null;
 		}
 	}  
+>>>>>>> origin/glsh
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -402,25 +459,39 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		 * fragment.
 		 */
 		private static final String ARG_SECTION_NUMBER = "section_number";
+<<<<<<< HEAD
+
+=======
 		public int sectionnum=0;
+>>>>>>> origin/glsh
 		/**
 		 * Returns a new instance of this fragment for the given section number.
 		 */
 		public static PlaceholderFragment newInstance(int sectionNumber) {
 			PlaceholderFragment fragment = new PlaceholderFragment();
+<<<<<<< HEAD
+=======
 			fragment.sectionnum = sectionNumber;
+>>>>>>> origin/glsh
 			Bundle args = new Bundle();
 			args.putInt(ARG_SECTION_NUMBER, sectionNumber);
 			fragment.setArguments(args);
 			return fragment;
 		}
+<<<<<<< HEAD
+
+=======
 		
+>>>>>>> origin/glsh
 		public PlaceholderFragment() {
 		}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
+<<<<<<< HEAD
+			View rootView = inflater.inflate(R.layout.fragment_main, container,
+=======
 			View rootView=null;
 			switch (this.sectionnum){//getArguments().getInt(ARG_SECTION_NUMBER)) {
 			case 1:
@@ -437,15 +508,22 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				rootView = inflater.inflate(R.layout.fragment_settings, container,false);
 			}
 			/*View rootView = inflater.inflate(R.layout.fragment_newport, container,
+>>>>>>> origin/glsh
 					false);
 			TextView textView = (TextView) rootView
 					.findViewById(R.id.section_label);
 			textView.setText(Integer.toString(getArguments().getInt(
+<<<<<<< HEAD
+					ARG_SECTION_NUMBER)));
+=======
 					ARG_SECTION_NUMBER)));*/
+>>>>>>> origin/glsh
 			return rootView;
 		}
 	}
 
+<<<<<<< HEAD
+=======
 	//Sample XYZ
 	public static class MyFragment1 extends Fragment {  
 	    //private Button btn; 
@@ -1328,4 +1406,5 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 			return parseCmd(ret);
 		}
 	}
+>>>>>>> origin/glsh
 }

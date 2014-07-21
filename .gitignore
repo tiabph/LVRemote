@@ -1,4 +1,7 @@
 <<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> origin/glsh
 #################
 ## Eclipse
 #################
@@ -214,6 +217,8 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+<<<<<<< HEAD
+=======
 =======
 #################
 ## Eclipse
@@ -430,4 +435,5 @@ pip-log.txt
 
 #Mr Developer
 .mr.developer.cfg
+>>>>>>> origin/glsh
 >>>>>>> origin/glsh
