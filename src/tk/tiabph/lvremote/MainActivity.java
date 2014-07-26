@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
@@ -258,7 +260,7 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		@Override
 		public int getCount() {
 			// Show 3 total pages.
-			return 5;
+			return 6;
 		}
 
 		@Override
@@ -275,6 +277,8 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 				return getString(R.string.title_section4).toUpperCase(l);
 			case 4:
 				return getString(R.string.title_section5).toUpperCase(l);
+			case 5:
+				return getString(R.string.title_section6).toUpperCase(l);
 			}
 			return null;
 		}
@@ -383,7 +387,11 @@ public class MainActivity extends Activity implements ActionBar.TabListener {
 		mHostAdd = address;
 		mHostPort = port;
 		try {
-			mSocket = new Socket(mHostAdd, mHostPort);
+			//mSocket = new Socket(mHostAdd, mHostPort);
+			//add time out to 5s
+			mSocket = new Socket();
+			SocketAddress socAddress = new InetSocketAddress(mHostAdd, port); 
+			mSocket.connect(socAddress, 5000);
 			br = new BufferedReader(new InputStreamReader(mSocket.getInputStream()));
 			
 		} catch (UnknownHostException e) {
